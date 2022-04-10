@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proviser.Views.CourtsHearing"
+             xmlns:local="clr-namespace:Proviser.ViewModels"
+             xmlns:model="clr-namespace:Proviser.Models" 
+             xmlns:bindingconverter="clr-namespace:Proviser.BindingConverter"
+             x:DataType="local:BaseViewModel"
+             x:Name="ContentHearing"
+             Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:DataType="local:CourtsHearingViewModel" Text="+" Command="{Binding AddItemCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <bindingconverter:PrisonDateToBindingValue x:Key="dateConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <RefreshView x:DataType="local:CourtsHearingViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+        <CollectionView x:Name="ItemsListView" 
+                ItemsSource="{Binding Items}"
+                SelectionMode="None" >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ContentView>
+                        <Frame HasShadow="True" CornerRadius="15" Margin="2" Padding="20" BackgroundColor="Lavender">
+                            <StackLayout x:DataType="model:Courts">
+
+                                <StackLayout Orientation="Horizontal">
+
+                                    <Label Text="{Binding Date}"
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource ListItemTextStyle}" 
+                            FontSize="20" />
+                                    
+                                    <Label Text="{Binding Status}"
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource ListItemTextStyle}" 
+                            FontSize="15" HorizontalOptions="End" />
+
+                                </StackLayout>
+                                
+                                
+                                <Label Text="{Binding SoketHeader}"
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="18" />
+                                
+                                <Label Text="{Binding Case}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="15" />
+
+                                <Label Text="{Binding Judge}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="15" />
+
+                                <Label Text="{Binding SoketPrisonDate}"
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="15" />
+
+                                <Label Text="{Binding SoketNote}"
+                            
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="15" />
+
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:CourtsHearingViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                                    </TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </Frame>
+                    </ContentView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>

@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:Proviser.ViewModels"
+             xmlns:model="clr-namespace:Proviser.Models"
+             x:DataType="viewmodels:CaseViewModel"
+             x:Class="Proviser.Views.Case"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="Start" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>       
+                </Grid.RowDefinitions>
+
+                <StackLayout Grid.Row="0">
+                    <Frame HasShadow="True" CornerRadius="15" BackgroundColor="Lavender" Margin="3">
+                        <StackLayout>
+                            <Label Text="{Binding Case}" FontSize="Medium"/>
+                            <Label Text="{Binding Judge}" FontSize="Medium"/>
+                            <Label Text="{Binding Court}" FontSize="Medium"/>
+                            <Label Text="{Binding Littigans}" FontSize="Medium"/>
+                            <Label Text="{Binding Category}" FontSize="Medium"/>
+                            <Label Text="{Binding PrisonDate}" FontSize="Medium"/>
+                            <Label Text="{Binding Note}" FontSize="Medium"/>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+
+                <StackLayout Grid.Row="1" Margin="3,3,0,0">
+                    <Label Text="Заседания" FontSize="Medium">
+                    </Label>
+                </StackLayout>
+
+                <CollectionView Grid.Row="2" HeightRequest="{Binding CourtHearingSize}"  x:Name="ItemsListView"  ItemsSource="{Binding ItemsHearing}" SelectionMode="None" VerticalScrollBarVisibility="Always" >
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <ContentView>
+                                <Frame HasShadow="True" CornerRadius="15" Margin="2" Padding="20">
+                                    <StackLayout x:DataType="model:Courts">
+                                        <Label Text="{Binding Date}" Style="{DynamicResource ListItemTextStyle}" FontSize="20"/>
+                                    </StackLayout>
+                                </Frame>
+                            </ContentView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <StackLayout Grid.Row="3" Margin="3,3,0,0">
+                    <Label Text="Решения" FontSize="Medium">
+                </Label>
+                </StackLayout>
+
+                <CollectionView Grid.Row="4" HeightRequest="{Binding CourtDecisionSize}"  x:Name="ItemsDecisionListView"  ItemsSource="{Binding ItemsDecision}" SelectionMode="None" VerticalScrollBarVisibility="Always">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <ContentView>
+                                <Frame HasShadow="True" CornerRadius="15" Margin="2" Padding="20">
+                                    <StackLayout x:DataType="model:Decision">
+                                        <Label Text="{Binding Date}"  Style="{DynamicResource ListItemTextStyle}" FontSize="12"/>
+                                        <Label Text="{Binding DecisionType}"  Style="{DynamicResource ListItemTextStyle}" FontSize="12"/>
+                                        <Label Text="{Binding JudiciaryType}"  Style="{DynamicResource ListItemTextStyle}" FontSize="12"/>
+                                        <Label Text="{Binding Court}"  Style="{DynamicResource ListItemTextStyle}" FontSize="12"/>
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:CaseViewModel}}, Path=ItemDecisionTapped}"		
+                                CommandParameter="{Binding .}">
+                                            </TapGestureRecognizer>
+                                        </StackLayout.GestureRecognizers>
+                                    </StackLayout>
+                                </Frame>
+                            </ContentView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <StackLayout Grid.Row="5" Margin="3,3,0,0">
+                    <ScrollView VerticalOptions="StartAndExpand">
+                        <StackLayout>
+                            <Button Text="Добавить дату судебного заседания" Command="{Binding AddDateCommand}" CornerRadius="15" Margin="3,3,3,3" />
+                            <Button Text="Добавить дату содержания под стражей" Command="{Binding AddDatePrisonCommand}" CornerRadius="15" Margin="3,3,3,3" />
+                            <Button Text="Обновить заметку" Command="{Binding EditNoteCommand}" CornerRadius="15" Margin="3,3,3,3" />
+                            <Button Text="Удалить последнее добавленое заседание" Command="{Binding DeleteHearingCommand}" CornerRadius="15" Margin="3,3,3,3" />
+                            <Button Text="Удалить" Command="{Binding DeleteCommand}" CornerRadius="15" Margin="3,3,3,3" />
+                        </StackLayout>
+                    </ScrollView>
+                </StackLayout>
+
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
